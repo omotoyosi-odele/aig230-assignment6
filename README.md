@@ -1,4 +1,4 @@
-# Assignment 6: Natural Language Processing
+# Language Modeling: Statistical N-Grams vs Recurrent Neural Networks
 
 ## Project Overview
 
@@ -8,8 +8,7 @@ This project involves the development and evaluation of two distinct language mo
 
 ## Data Preparation (Part D)
 
-* 
-**Source**: NLTK Brown corpus, category: 'news'.
+* **Source**: NLTK Brown corpus, category: 'news'.
 
 
 * **Preprocessing**:
@@ -47,12 +46,10 @@ This project involves the development and evaluation of two distinct language mo
 
 ## Part A: Statistical n-gram Language Model
 
-* 
-**Model Type**: Trigram (n=3) from NLTK library with Laplace (Add-1) smoothing.
+* **Model Type**: Trigram (n=3) from NLTK library with Laplace (Add-1) smoothing.
 
 
-* 
-**Smoothing Necessity**: Smoothing is required to prevent the model from assigning zero probability to unseen trigrams, which would otherwise result in infinite perplexity.
+* **Smoothing Necessity**: Smoothing is required to prevent the model from assigning zero probability to unseen trigrams, which would otherwise result in infinite perplexity.
 
 
 
@@ -62,8 +59,7 @@ This project involves the development and evaluation of two distinct language mo
 * **Test Perplexity**: ~1991.85
 * **Perplexity Factors**: Vocabulary size (larger vocab increases perplexity), the quality/diversity of the data, the choice of smoothing, and the context window (n-gram length).
 * **Observations**: The high perplexity is expected for Laplace smoothing on a small dataset, as it dilutes probability mass across a massive number of unseen combinations.
-* 
-**Text Generation**: Generated text showed high local grammatical correctness (3-word windows) but lacked global coherence.
+* **Text Generation**: Generated text showed high local grammatical correctness (3-word windows) but lacked global coherence.
 
 
 
@@ -71,36 +67,29 @@ This project involves the development and evaluation of two distinct language mo
 
 ## Part B: Neural Language Model (RNN)
 
-* 
-**Architecture**: PyTorch-based RNN featuring an `nn.Embedding` layer, an `nn.RNN` layer (with `batch_first=True`), and an `nn.Linear` output layer.
+* **Architecture**: PyTorch-based RNN featuring an `nn.Embedding` layer, an `nn.RNN` layer (with `batch_first=True`), and an `nn.Linear` output layer.
 
 
 * **Hardware Acceleration**: Trained on Apple Silicon (M4) using the **MPS (Metal Performance Shaders)** backend.
 
 ### Final Hyperparameters
 
-* 
-**Embedding Dimension**: 128 
+* **Embedding Dimension**: 128 
 
 
-* 
-**Hidden Dimension**: 256 
+* **Hidden Dimension**: 256 
 
 
-* 
-**Number of Layers**: 1 
+* **Number of Layers**: 1 
 
 
-* 
-**Learning Rate**: 1e-3 
+* **Learning Rate**: 1e-3 
 
 
-* 
-**Sequence Length**: 30 
+* **Sequence Length**: 30 
 
 
-* 
-**Total Parameters**: 1,466,336
+* **Total Parameters**: 1,466,336
 
 
 
@@ -111,33 +100,26 @@ This project involves the development and evaluation of two distinct language mo
 
 ### Results
 
-* 
-**Final Test Perplexity**: ~5625.51, at Epoch 5. (~758.50 at Epoch 2)
+* **Final Test Perplexity**: ~5625.51, at Epoch 5. (~758.50 at Epoch 2)
 
 
-* 
-**Comparison**: The RNN achieved significantly higher perplexity than the n-gram model at Epoch 5, but had a lower perplexity at Epochs 1 and 2.
+* **Comparison**: The RNN achieved significantly higher perplexity than the n-gram model at Epoch 5, but had a lower perplexity at Epochs 1 and 2.
 
 
-* 
-**Why?**: Unlike the n-gram model, the RNN uses dense embeddings to capture semantic relationships and shares parameters across time steps, allowing it to generalize much more effectively to unseen sequences. Despite this, the RNN overfits because its high parameter capacity relative to the small dataset allows it to memorize specific training sequences rather than learning generalizable linguistic patterns. Without regularization like dropout, the model effectively stores the unique signatures of the training data in its hidden states and embeddings.
+* **Why?**: Unlike the n-gram model, the RNN uses dense embeddings to capture semantic relationships and shares parameters across time steps, allowing it to generalize much more effectively to unseen sequences. Despite this, the RNN overfits because its high parameter capacity relative to the small dataset allows it to memorize specific training sequences rather than learning generalizable linguistic patterns. Without regularization like dropout, the model effectively stores the unique signatures of the training data in its hidden states and embeddings.
 
 
 
 ### Text Generation Analysis
 
 * **Sample (Epoch 2)**: *"`<bos>` the two climate of central and local governments to <unk> three new members to have their support to the attention of the congolese government for the <unk> of communism throughout southeast asia `<eos>`"*
-* 
-**Grammaticality**: High; the model correctly handles basic English syntax.
+* **Grammaticality**: High; the model correctly handles basic English syntax.
 
 
-* 
-**Coherence**: Moderate; while locally logical, the sentence lacks a complex overarching narrative.
+* **Coherence**: Moderate; while locally logical, the sentence lacks a complex overarching narrative.
 
 
-* 
-**Repetition**: Low; the model successfully avoided infinite loops in the first 30 tokens.
+* **Repetition**: Low; the model successfully avoided infinite loops in the first 30 tokens.
 
 
-* 
-**Long-range Dependencies**: The model successfully maintained subject-verb agreement over short-to-medium spans.
+* **Long-range Dependencies**: The model successfully maintained subject-verb agreement over short-to-medium spans.
